@@ -45,3 +45,41 @@ app
 
 - `first blog` ga kirish uchun `http://localhost:3000/blog/first` ga murojaat qilish kerak
 - `second blog` ga kirish uchun `http://localhost:3000/blog/second` ga murojaat qilish kerak
+
+---
+
+## **📌 3-dars Dynamic Routes**
+
+`dynamic routes` dinamik URL'lar yaratish imkonini beradi. Masalan, agar sening e-commerce saytida har bir mahsulotning alohida sahifasi bo‘lsa, `product/[id]` kabi dynamic route yaratish mumkin.
+
+```
+app/
+ ├── product/
+ │    ├── [id]/
+ │    │    ├── page.tsx
+```
+
+**Dynamic URL qanday ishlaydi?**
+
+Agar user quyidagi URL'larni ochsa:
+
+- /product/1 → id = 1
+- /product/iphone → id = iphone
+- /product/macbook → id = macbook
+
+Bu bilan har xil mahsulotlar uchun bitta sahifadan foydalanish mumkin.
+
+```tsx
+import React from "react";
+
+export default function ProductDetails({
+  params,
+}: {
+  params: { productId: string };
+}) {
+  const productId = params.productId;
+  return <div>ProductDetails {productId}</div>;
+}
+```
+
+- dynamic ochilgan productDetail pageida paramsdagi id ni olish
