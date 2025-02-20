@@ -83,3 +83,4 @@ export default function ProductDetails({
 ```
 
 - dynamic ochilgan productDetail pageida paramsdagi id ni olish
+- ushbu id orqali shu mahsulot haqidagi malumotlarni olish mumkin
