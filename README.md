@@ -84,3 +84,81 @@ export default function ProductDetails({
 
 - dynamic ochilgan productDetail pageida paramsdagi id ni olish
 - ushbu id orqali shu mahsulot haqidagi malumotlarni olish mumkin
+
+---
+
+## **📌 4-dars Nested Dynamic Routes**
+
+Next.js 15 App Router’da nested dynamic routes (ichma-ich dinamik marshrutlar) qanday ishlashini tushuntirib beraman.
+
+Misol uchun, bizda Product sahifasi va har bir product uchun Reviews sahifasi bo‘lsin:
+
+1. **/products** – barcha mahsulotlarni ko‘rsatadi.
+2. **/products/[productId]** – bitta mahsulotning sahifasi.
+3. **/products/[productId]/reviews** – mahsulotga tegishli barcha sharhlar.
+4. **/products/[productId]/reviews/[reviewId]** – mahsulot sharhining aniq bir sahifasi.
+
+```
+app
+ ├── products
+ │   ├── page.tsx                  (Barcha mahsulotlarni ko'rsatadi)
+ │   ├── [productId]
+ │   │   ├── page.tsx               (Bitta mahsulot sahifasi)
+ │   │   ├── reviews
+ │   │   │   ├── page.tsx           (Mahsulotning barcha sharhlari)
+ │   │   │   ├── [reviewId]
+ │   │   │   │   ├── page.tsx       (Aniq bir sharh sahifasi)
+
+```
+
+```tsx
+import React from "react";
+
+export default function ProductList() {
+  return (
+    <div>
+      <h1>Product List</h1>
+      <h2>Product 1</h2>
+      <h2>Product 2</h2>
+      <h2>Product 3</h2>
+    </div>
+  );
+}
+```
+
+- `product` page
+
+```tsx
+import React from "react";
+
+export default function ProductDetails({
+  params,
+}: {
+  params: { productId: string };
+}) {
+  const productId = params.productId;
+  return <div>ProductDetails {productId}</div>;
+}
+```
+
+- `Product Detail` page yani bu pageda id orqali bir mahsulotning malumotlarini olish mumkin
+
+```tsx
+import React from "react";
+
+export default function ProductReview({
+  params,
+}: {
+  params: { productId: string; reviewId: string };
+}) {
+  const { productId, reviewId } = params;
+  return (
+    <div>
+      <h1>ProductId {productId}</h1>
+      <h1>RewievId {reviewId}</h1>
+    </div>
+  );
+}
+```
+
+- `ProductReview` page
