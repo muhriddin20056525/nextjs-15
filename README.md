@@ -214,3 +214,42 @@ export default async function Docs({
 ```
 
 - `[[...slug]]` optional catch-all segments bo‘lib, `/docs` sahifasi bo‘sh `slug` bilan ham ishlaydi. Agar URL `/docs/feature1` yoki `/docs/feature1/concept1` bo‘lsa, `params.slug` massiv sifatida keladi. Agar `slug` bo‘sh bo‘lsa `(/docs)`, u default sahifa sifatida ishlaydi.
+
+---
+
+## **📌 6-dars Not Found Page**
+
+Next.js'da not-found.tsx sahifasi 404 xatolik sahifasini yaratish uchun ishlatiladi. Agar foydalanuvchi mavjud bo'lmagan sahifaga o'tsa yoki notFound() funksiyasi chaqirilsa, ushbu sahifa avtomatik ravishda ko'rsatiladi. Bu foydalanuvchilarga yo'q sahifalarni aniq tushunishga yordam beradi.
+
+```tsx
+/my-next-app
+│── /app
+│   ├── /(routes)
+│   │   ├── /dashboard
+│   │   │   ├── page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── loading.tsx
+│   │   │   ├── not-found.tsx
+│   │   ├── page.tsx
+│   ├── not-found.tsx
+│── /public
+│── /styles
+│── /components
+│── /lib
+│── next.config.js
+│── package.json
+│── tsconfig.json
+
+```
+
+- `app/not-found.tsx` butun loyiha uchun global 404 sahifani anglatadi,` dashboard/not-found.tsx` esa faqat shu route uchun alohida 404 sahifani ifodalaydi.
+
+```tsx
+import { notFound } from "next/navigation";
+
+if (parseInt(reviewId) > 1000) {
+  notFound();
+}
+```
+
+- `not found 404` sahifasini `notFound` funksiyasi orqali kerakli joyda ochish
