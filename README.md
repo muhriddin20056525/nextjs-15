@@ -162,3 +162,55 @@ export default function ProductReview({
 ```
 
 - `ProductReview` page
+
+---
+
+## **📌 5-dars Catch all segments**
+
+**Catch-All Segments** — Next.js'ning dinamik routing (yo‘nalish) funksiyasidir. U `[...param]` sintaksisi orqali ishlaydi va URL ichidagi bir yoki bir nechta segmentlarni array shaklida qo‘lga olishga imkon beradi.
+
+⏩ Oddiy dinamik routing `([param])` faqat bitta segmentni qo‘lga oladi, catch-all routing esa bir nechta segmentlarni qabul qilishi bilan farq qiladi.
+
+```
+📁 /app
+ ├── 📂 docs
+ │   ├── 📄 [...slug]/page.tsx → `/docs/*`
+
+```
+
+- `catch all segment` dan foydalanish uchun papka strukturasi `docs` misolida
+- Bu papka tuzilishida har qanday URL `/docs/...` shaklida bo‘lishi shart.
+
+```tsx
+// app/docs/[...slug].page.tsx
+
+import React from "react";
+
+export default async function Docs({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const { slug } = await params;
+  if (slug?.length === 2) {
+    return (
+      <h1>
+        Viewing docs for feature {slug[0]} and concept {slug[0]}
+      </h1>
+    );
+  } else if (slug?.length === 1) {
+    return <h1>Viewing docs for feature {slug[0]}</h1>;
+  }
+  return <h1>Docs home page</h1>;
+}
+```
+
+- Bu kod Next.js 15 da dinamik marshrutlash bilan ishlaydi va URL'dagi segmentlarni params orqali oladi. Catch-all segments ([...slug]) yordamida /docs/... yo‘nalishlari boshqariladi. URL'dagi segmentlar soniga qarab turli natijalar qaytariladi: 1 ta segment bo‘lsa faqat feature nomi, 2 ta bo‘lsa feature va concept ko‘rsatiladi.
+
+```
+📁 /app
+├── 📂 docs/
+│ ├── 📄 [[...slug]]/page.tsx → /docs, /docs/feature1, /docs/feature1/concept1
+```
+
+- `[[...slug]]` optional catch-all segments bo‘lib, `/docs` sahifasi bo‘sh `slug` bilan ham ishlaydi. Agar URL `/docs/feature1` yoki `/docs/feature1/concept1` bo‘lsa, `params.slug` massiv sifatida keladi. Agar `slug` bo‘sh bo‘lsa `(/docs)`, u default sahifa sifatida ishlaydi.
