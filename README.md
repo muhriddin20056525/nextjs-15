@@ -253,3 +253,39 @@ if (parseInt(reviewId) > 1000) {
 ```
 
 - `not found 404` sahifasini `notFound` funksiyasi orqali kerakli joyda ochish
+
+---
+
+## **📌 7-dars File Colocation**
+
+**File Colocation** — Next.js 15 da komponent yoki sahifa bilan bog‘liq fayllarni (stil, test, util funksiyalar) o‘sha komponent/sahifa joylashgan papkada saqlash prinsipidir. Bu kodning tartibli bo‘lishiga va har bir komponentning alohida ishlashiga yordam beradi. Masalan, app/dashboard/page.tsx sahifasi uchun stil va util funksiyalarini app/dashboard/ ichida saqlash mumkin.
+
+```tsx
+import React from "react";
+
+export default function LineChart() {
+  return <h1>LineChart</h1>;
+}
+```
+
+- `dashboard/line-chart.tsx` fayli page sifatida ishlamaydi u dashboard papkasi ichida ochilsa ham boshqa nom bilan nomlandi
+
+```tsx
+import React from "react";
+
+function BarChart() {
+  return <div>BarChart</div>;
+}
+```
+
+`dashboard/page.tsx` - fayli page uchun ochilsa ham u ishlamaydi sababi u export qilinmadi
+
+```tsx
+import React from "react";
+
+export default function BarChart() {
+  return <div>BarChart</div>;
+}
+```
+
+- `dashboard/page.tsx` page sifatida ishlaydi
