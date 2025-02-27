@@ -289,3 +289,12 @@ export default function BarChart() {
 ```
 
 - `dashboard/page.tsx` page sifatida ishlaydi
+
+---
+
+## **📌 8-dars Private Folder**
+
+Next.js'da pastki chiziq `(\_)` bilan boshlangan papkalar `(\_lib, \_utils, \_services)` private folder sifatida ishlatilishi mumkin, chunki ular marshrut sifatida aniqlanmaydi va faqat ichki kod uchun mo‘ljallangan.
+
+- `/app/_lib/format-date.ts` - ushbu fayl vaqtni formatlash uchun bu ishlaydi
+- `/app/_lib/page.tsx` - ushbu `page` `app` papkasi ichida bolsa ham undan oldingi papka `(\_)` belgi bilan boshlab nomlangani uchun `page` sifatida ishlamaydi
