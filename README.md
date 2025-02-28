@@ -298,3 +298,51 @@ Next.js'da pastki chiziq `(\_)` bilan boshlangan papkalar `(\_lib, \_utils, \_se
 
 - `/app/_lib/format-date.ts` - ushbu fayl vaqtni formatlash uchun bu ishlaydi
 - `/app/_lib/page.tsx` - ushbu `page` `app` papkasi ichida bolsa ham undan oldingi papka `(\_)` belgi bilan boshlab nomlangani uchun `page` sifatida ishlamaydi
+
+---
+
+## **📌 9-dars Route Group**
+
+**Route Group** – bu ma’lum bir jarayon uchun kerak bo‘lgan bir nechta sahifalarni bitta asosiy papkada jamlash usuli. Bu usul kodni tartibli saqlashga yordam beradi, lekin URL tarkibiga ta’sir qilmaydi.
+
+**Misol:**
+`Autentifikatsiya` jarayonida `Login` va `Register` sahifalariga ehtiyoj bo‘ladi. Biz ularni `auth` papkasida quyidagicha joylashtiramiz:
+
+```
+app/
+├── auth/
+│   ├── login/
+│   │   ├── page.tsx
+│   ├── register/
+│   │   ├── page.tsx
+```
+
+- **URL qanday bo‘ladi?**
+
+  - http://localhost:3000/auth/login
+  - http://localhost:3000/auth/register
+
+Bu URL'lar ortiqcha auth segmentini o‘z ichiga oladi. Buni soddalashtirish uchun Route Group dan foydalanamiz.
+
+**Agar auth papkasini quyidagicha yaratsak:**
+
+```
+app/
+├── (auth)/
+│   ├── login/
+│   │   ├── page.tsx
+│   ├── register/
+│   │   ├── page.tsx
+```
+
+- **Endi URL qanday bo‘ladi?**
+
+  - `http://localhost:3000/login`
+  - `http://localhost:3000/register`
+
+Bu usulda (auth) papkasi faqat kod tuzilmasini tartibga soladi, lekin URL'ga ta’sir qilmaydi. Natijada, foydalanuvchilar uchun ancha soddaroq va qulay manzillar hosil bo‘ladi.
+
+- `()` ichida ochilgan papkalar URL'ga ta'sir qilmaydi, faqat kod strukturasini tartibga solish uchun ishlatiladi.
+- Route Group yordamida loyihani tartibli saqlash va muayyan sahifalarni guruhlash mumkin.
+- Har bir Route Group o‘zining `layout.tsx` fayliga ega bo‘lishi mumkin, bu esa guruh ichidagi sahifalar uchun umumiy UI yaratishga yordam beradi.
+- Masalan, `app/(auth)/login/page.tsx` fayli `/login` sifatida ishlaydi, ya’ni `(auth)` papkasi URL'da ko‘rinmaydi.
