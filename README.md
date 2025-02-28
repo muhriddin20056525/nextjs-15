@@ -346,3 +346,32 @@ Bu usulda (auth) papkasi faqat kod tuzilmasini tartibga soladi, lekin URL'ga ta�
 - Route Group yordamida loyihani tartibli saqlash va muayyan sahifalarni guruhlash mumkin.
 - Har bir Route Group o‘zining `layout.tsx` fayliga ega bo‘lishi mumkin, bu esa guruh ichidagi sahifalar uchun umumiy UI yaratishga yordam beradi.
 - Masalan, `app/(auth)/login/page.tsx` fayli `/login` sifatida ishlaydi, ya’ni `(auth)` papkasi URL'da ko‘rinmaydi.
+
+---
+
+## **📌 10-dars Layouts**
+
+Next.js 15-da layout global komponent bo‘lib, u sahifalar orasida umumiy tuzilmani (masalan, navbar, footer) saqlash uchun ishlatiladi. U app/layout.tsx faylida joylashadi va barcha sahifalar uchun yagona konteyner vazifasini bajaradi.
+
+```tsx
+import React, { ReactNode } from "react";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html>
+      <body>
+        <header>
+          <p>Header</p>
+        </header>
+        {children}
+        <footer>
+          <p>Footer</p>
+        </footer>
+      </body>
+    </html>
+  );
+}
+```
+
+- `layout.tsx` fayli foydalanuvchi istalgan routega o'tsa ham `navbar` va `footer` unga ko'rinadi
+- `layout.tsx` faylida `{children}` sahifa tarkibini ko‘rsatish uchun ishlatiladi.
