@@ -375,3 +375,68 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 - `layout.tsx` fayli foydalanuvchi istalgan routega o'tsa ham `navbar` va `footer` unga ko'rinadi
 - `layout.tsx` faylida `{children}` sahifa tarkibini ko‘rsatish uchun ishlatiladi.
+
+---
+
+## **📌 11-dars Nested Layouts**
+
+**Nested Layouts** – bu bir nechta ichma-ich joylashgan layoutlarni ishlatish imkonini beradigan Next.js App Router xususiyati. Bu yondashuv katta loyihalarda tartibni saqlash va kodni qayta ishlatish uchun juda foydali. Har bir route o‘zining layout.tsx fayliga ega bo‘lishi mumkin va ular bir-birining ichida joylashishi mumkin.
+
+```
+app
+ ├── layout.tsx              # 🔹 Global (Root) Layout – Barcha sahifalar uchun
+ ├── page.tsx                # 🔹 Asosiy sahifa
+ ├── products
+ │   ├── page.tsx            # 🔹 `/products` sahifasi
+ │   ├── [productId]
+ │   │   ├── layout.tsx      # 🔹 Har bir mahsulot uchun Layout
+ │   │   ├── page.tsx        # 🔹 Mahsulot sahifasi
+
+```
+
+`app/layout.tsx`
+
+```tsx
+import React, { ReactNode } from "react";
+import "./globals.css";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html>
+      <body>
+        <header className="w-full p-10 bg-blue-600 text-white">
+          <p>Header</p>
+        </header>
+        {children}
+        <footer className="w-full p-10 bg-green-600 text-white">
+          <p>Footer</p>
+        </footer>
+      </body>
+    </html>
+  );
+}
+```
+
+- Bu barcha sahifalar uchun umumiy `layout` bo‘lib, `Header` va `Footer` ni o‘z ichiga oladi.
+- Barcha sahifalar `Header` va `Footer` bilan chiqadi.
+
+`app/products/[productId]/layout.tsx`
+
+```tsx
+import React, { ReactNode } from "react";
+
+export default function ProductDetailLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <>
+      {children}
+      <h2>Featured Products</h2>
+    </>
+  );
+}
+```
+
+- har bir `product` oxiriga `<h2>Featured Products</h2>` matni chiqadi
