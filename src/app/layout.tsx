@@ -1,6 +1,11 @@
 import React, { ReactNode } from "react";
 import "./globals.css";
 
+export const metadata = {
+  title: "Next.js",
+  description: "Generate by Next.js",
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html>

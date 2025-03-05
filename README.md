@@ -440,3 +440,123 @@ export default function ProductDetailLayout({
 ```
 
 - har bir `product` oxiriga `<h2>Featured Products</h2>` matni chiqadi
+
+---
+
+## **📌 12-dars Routing Metadata**
+
+Next.js 15 versiyasida `Routing Metadata` (yo'naltirish metama'lumotlari) `App Router` bilan ishlashda `SEO` va `Open Graph` uchun sahifa darajasida metama'lumotlarni boshqarish imkoniyatini beradi.
+
+**Routing Metadata nima?**
+Bu Next.js 15 da har bir sahifa yoki layout uchun SEO va boshqa meta ma'lumotlarni dinamik yoki statik ravishda ta'minlash usulidir.
+
+**Routing Metadata qanday ishlaydi?**
+Next.js 15 da har bir sahifa (page.tsx) yoki layout (layout.tsx) ichida metadata nomli o'zgaruvchidan yoki generateMetadata funksiyasidan foydalanib, meta-ma'lumotlarni belgilash mumkin.
+
+`app/layout.tsx`
+
+```tsx
+import React, { ReactNode } from "react";
+import "./globals.css";
+
+export const metadata = {
+  title: "Next.js",
+  description: "Generate by Next.js",
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html>
+      <body>
+        <header className="w-full p-10 bg-blue-600 text-white">
+          <p>Header</p>
+        </header>
+        {children}
+        <footer className="w-full p-10 bg-green-600 text-white">
+          <p>Footer</p>
+        </footer>
+      </body>
+    </html>
+  );
+}
+```
+
+- Agar `layout.tsx` ichida `metadata` belgilansa, u shu `layout` ichidagi barcha sahifalar uchun qo‘llanadi.
+
+`app/products/[productId]/page.tsx`
+
+```tsx
+import { Metadata } from "next";
+import React from "react";
+
+type Props = {
+  params: Promise<{ productId: string }>;
+};
+
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const id = (await params).productId;
+  const title = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`IPhone ${id}`);
+    }, 100);
+  });
+  return {
+    title: `Product ${title}`,
+  };
+};
+
+export default async function ProductDetails({ params }: Props) {
+  const productId = (await params).productId;
+  return <div>ProductDetails {productId}</div>;
+}
+```
+
+- `import { Metadata } from "next";` Bu Next.js da metadata turini olish uchun ishlatiladi.
+- `params - Promise<{ productId: string }>` Bu params obyekt bo‘lib, unda `productId` mavjud.
+- `Promise` sifatida yozilgani `params` ma’lumotlari `async` ishlashga mos kelishi uchun (yoki API dan kelishi mumkin).
+- `generateMetadata` Next.js ning metadata'ni dinamik yaratish uchun ishlatiladigan asinxron funksiyasi.
+- `params` ni kutib olish `const id = (await params).productId;`
+  - `params` obyektidan `productId` ni oladi.
+- `setTimeout` orqali `100ms` kechikib `IPhone {id}` sarlavhasini yaratadi.
+  - Masalan, `/product/13` sahifasi bo‘lsa `"IPhone 13"` deb qaytaradi.
+- `title: Product IPhone {id}` → `"Product IPhone 13"`
+  - Bu metadata Next.js tomonidan `SEO` uchun `<title>` tegi sifatida ishlatiladi.
+
+Metadata faqat `server` componentda ishlaydi. Agar agar `client` componentda ishlatish kerak bo'lsa shu `page` dagi malumotlarni boshqa `component` ga o'tkazib shu `page` ga `import` qilish kerak
+
+`/app/counter/page.tsx`
+
+```tsx
+import Counter from "./counter";
+
+export const metadata = {
+  title: "Counter",
+};
+
+export default function CounterPage() {
+  return <Counter />;
+}
+```
+
+`/app/counter/counter.tsx`
+
+```tsx
+"use client";
+
+import React, { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <p>Count {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+- `counter` client componentga yaratildi
+- `metadata` server componentga yaratildi
