@@ -1,8 +1,12 @@
 import React, { ReactNode } from "react";
 import "./globals.css";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Next.js",
+export const metadata: Metadata = {
+  title: {
+    template: "Next js tutorial codevolution",
+    default: "%s | Codevolution",
+  },
   description: "Generate by Next.js",
 };
 

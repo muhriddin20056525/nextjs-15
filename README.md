@@ -560,3 +560,53 @@ export default function Counter() {
 
 - `counter` client componentga yaratildi
 - `metadata` server componentga yaratildi
+
+---
+
+## **📌 13-dars Title Metadata**
+
+`app/layout.tsx`
+
+```tsx
+export const metadata: Metadata = {
+  title: {
+    template: "Next js tutorial codevolution",
+    default: "%s | Codevolution",
+  },
+  description: "Generate by Next.js",
+};
+```
+
+Bu metadata nomli konstantani eksport qiladi va unga Metadata turini beradi.
+Bu TypeScriptda ishlatilgan bo‘lib, metadata Next.js tomonidan avtomatik ravishda tan olinadigan maxsus obyekt hisoblanadi.
+
+- `template`
+  - Sahifa sarlavhasi `(title)` uchun asosiy formatni belgilaydi.
+- `default`
+  - Agar `title` berilmagan bo‘lsa, sahifaning default sarlavhasi bo‘ladi.
+  - `%s` dinamik sarlavha joyiga qo‘yiladi. Masalan, agar `title: "Home"` berilsa, u `Home | Codevolution` shaklida chiqadi.
+- `description`
+  - Bu meta description bo‘lib, sahifa haqida qisqacha ma’lumot beradi.
+  - SEO (Search Engine Optimization) uchun muhim.
+
+```tsx
+export const metadata: Metadata = {
+  title: {
+    absolute: "Blog",
+  },
+};
+```
+
+- `absolute` - sahifaning mutlaq (to‘liq) sarlavhasi sifatida ishlaydi.
+- Agar `absolute` ishlatilsa, boshqa metadata `title` sozlamalari `(masalan, template, default)` inobatga olinmaydi.
+- Bu degani, sahifa sarlavhasi doimo `Blog` bo‘lib qoladi.
+
+<!-- prettier-ignore-start -->
+
+| Xususiyat  | Tavsif  | Misol  |
+|------------|---------|--------|
+| `absolute` | To‘liq, o‘zgarmas sarlavha | `"Blog"` |
+| `template` | Dinamik format, `%s` bilan ishlaydi | `"%s | My Site"` |
+| `default` | Agar `title` berilmasa, foydalaniladi | `"My Blog"` |
+
+<!-- prettier-ignore-end -->
