@@ -610,3 +610,54 @@ export const metadata: Metadata = {
 | `default` | Agar `title` berilmasa, foydalaniladi | `"My Blog"` |
 
 <!-- prettier-ignore-end -->
+
+---
+
+## **📌 14-dars Link component**
+
+```tsx
+import Link from "next/link";
+<Link href={"/blog"}>Blog</Link>
+<Link href={"/products"}>Products</Link>
+```
+
+- `import Link from "next/link";`
+
+  - **Next.js**'ning **`Link`** komponenti import qilinmoqda.
+  - Bu komponent **SPA (Single Page Application)** ilovalari uchun **tezkor navigatsiya** qilish imkonini beradi.
+
+- `<Link href={"/blog"}>Blog</Link>`
+
+  - **"/blog"** sahifasiga yo‘naltiruvchi link.
+  - `href={"/blog"}` → foydalanuvchi bosganda `/blog` sahifasiga o'tadi.
+
+- `<Link href={"/products"}>Products</Link>`
+  - **"/products"** sahifasiga yo‘naltiruvchi link.
+  - `href={"/products"}` → foydalanuvchi bosganda `/products` sahifasiga o'tadi.
+
+### **Muhim jihatlar:**
+
+- **`<a>` tegi ishlatilmagan**, chunki `Link` avtomatik ravishda `<a>` ichiga joylashtiriladi.
+- **Next.js**'ning `Link` komponenti **tezkor sahifa yuklanishini** ta’minlaydi.
+- **Brauzer sahifani qayta yuklamaydi**, chunki Next.js **client-side routing** ishlatadi.
+
+### **Natija:**
+
+- "Blog" tugmasi bosilganda `/blog` sahifasiga o'tadi.
+- "Products" tugmasi bosilganda `/products` sahifasiga o'tadi.
+
+```tsx
+const productId = 100;
+<Link href={`/products/${productId}`}>Product {productId}</Link>;
+```
+
+- `const productId = 100;`
+
+  - **`productId` o'zgaruvchisi** yaratilgan va **100** qiymati berilgan.
+
+- `<Link href={`/products/${productId}`}>Product {productId}</Link>`
+  - `href={`/products/${productId}`}` → **dynamik URL** yaratish.
+  - **Final natija:** `<Link href="/products/100">Product 100</Link>`
+  - Tugma bosilganda `/products/100` sahifasiga yo‘naltiradi.
+- Tugma bosilganda **"/products/100"** sahifasiga yo‘naltiriladi.
+- **`productId` o‘zgaruvchisini o‘zgartirish** orqali boshqa mahsulot sahifasiga o'tish mumkin.
