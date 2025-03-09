@@ -661,3 +661,48 @@ const productId = 100;
   - Tugma bosilganda `/products/100` sahifasiga yo‘naltiradi.
 - Tugma bosilganda **"/products/100"** sahifasiga yo‘naltiriladi.
 - **`productId` o‘zgaruvchisini o‘zgartirish** orqali boshqa mahsulot sahifasiga o'tish mumkin.
+
+---
+
+## **📌 15-dars Active Links**
+
+```tsx
+const navLinks = [
+  { name: "Register", href: "/register" },
+  { name: "Login", href: "/login" },
+  { name: "Forgot Password", href: "/forgot-password" },
+];
+
+export default function AuthLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  return (
+    <div>
+      {navLinks.map((link) => {
+        const isActive =
+          pathname == link.href ||
+          (pathname.startsWith(link.href) && link.href !== "/");
+
+        return (
+          <Link
+            className={isActive ? "font-bold mr-4" : "text-blue-500 mr-4"}
+            href={link.href}
+            key={link.name}
+          >
+            {link.name}
+          </Link>
+        );
+      })}
+
+      {children}
+    </div>
+  );
+}
+```
+
+- **`navLinks`** → Ro‘yxat (`array`), unda har bir navigatsiya elementi uchun **`name`** va **`href`** bor.
+- **`usePathname()`** → Hozirgi sahifa yo‘nalishini (URL) olish uchun ishlatiladi.
+- **`isActive`** → Agar `pathname` va `link.href` mos kelsa yoki `pathname` shu yo‘nalish bilan boshlansa, **aktiv link** deb belgilanadi.
+- **`map()`** → `navLinks` ichidagi har bir elementni ekranga chiqarish uchun ishlatiladi.
+- **`<Link>`** → `next/link` yordamida **tezkor yo‘naltirish** (client-side routing) amalga oshiriladi.
+- **`{children}`** → `AuthLayout` ichiga boshqa komponentlar joylashtirish imkonini beradi.
