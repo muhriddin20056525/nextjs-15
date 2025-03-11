@@ -706,3 +706,82 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 - **`map()`** → `navLinks` ichidagi har bir elementni ekranga chiqarish uchun ishlatiladi.
 - **`<Link>`** → `next/link` yordamida **tezkor yo‘naltirish** (client-side routing) amalga oshiriladi.
 - **`{children}`** → `AuthLayout` ichiga boshqa komponentlar joylashtirish imkonini beradi.
+
+---
+
+## **📌 16-dars Params and SearchParams**
+
+`params` – bu dinamik URL segmentlarini `(/product/123)` olish uchun ishlatiladi.
+`searchParams` – bu URL query string `(/products?category=shoes)` orqali ma’lumot olish uchun ishlatiladi.
+`params` odatda sahifa marshrutini aniqlaydi, `searchParams` esa `filtr` va `qidiruv` uchun qo‘llanadi.
+
+```tsx
+<Link href={"/articles/breaking-news-123?lang=en"}>Read in English</Link>
+<Link href={"/articles/breaking-news-123?lang=fr"}>Read in French</Link>
+```
+
+- Bu yerda ikki xil til opsiyasi bilan bog‘langan `<Link>` komponentlari bor:
+  - Inglizcha versiya: `href="/articles/breaking-news-123?lang=en"`
+  - Fransuzcha versiya: `href="/articles/breaking-news-123?lang=fr"`
+- `params.articleId` → Maqola nomini olish uchun `(breaking-news-123)`.
+- `searchParams.lang` → Til opsiyalarini o‘zgartirish uchun `(en yoki fr)`.
+
+```tsx
+import Link from "next/link";
+import React from "react";
+
+export default function NewsArticle({
+  params,
+  searchParams,
+}: {
+  params: { articleId: string };
+  searchParams: { lang?: "en" | "es" | "fr" };
+}) {
+  const { articleId } = params;
+  const { lang = "en" } = searchParams;
+
+  return (
+    <div>
+      <h1>News article id: {articleId}</h1>
+      <p>Reading in language: {lang}</p>
+
+      <div>
+        <Link href={`/articles/${articleId}?lang=en`}>English</Link>
+        <Link href={`/articles/${articleId}?lang=es`}>Spanish</Link>
+        <Link href={`/articles/${articleId}?lang=fr`}>French</Link>
+      </div>
+    </div>
+  );
+}
+```
+
+- **`params`** → Dinamik URL parametrlarini o‘z ichiga oladi (`articleId`).
+- **`searchParams`** → URL query string (`?lang=en`, `?lang=es`, `?lang=fr`) orqali keladigan qo‘shimcha parametrlar.
+
+- **`params.articleId`** → URL orqali keladigan maqola identifikatori (`/articles/breaking-news-123` → `params.articleId = "breaking-news-123"`).
+- **`searchParams.lang`** → Foydalanuvchi tanlagan til (`?lang=es` → `searchParams.lang = "es"`).
+- **`const { lang = "en" } = searchParams;`** → Agar `lang` berilmagan bo‘lsa, **standart til `en` (inglizcha) bo‘ladi**.
+- **`<Link href={`/articles/${articleId}?lang=en`}>English</Link>`**
+  - Bosilganda **Inglizcha** versiyaga o‘tadi (`/articles/breaking-news-123?lang=en`).
+- **`<Link href={`/articles/${articleId}?lang=es`}>Spanish</Link>`**
+  - Bosilganda **Ispancha** versiyaga o‘tadi (`/articles/breaking-news-123?lang=es`).
+- **`<Link href={`/articles/${articleId}?lang=fr`}>French</Link>`**
+  - Bosilganda **Fransuzcha** versiyaga o‘tadi (`/articles/breaking-news-123?lang=fr`).
+
+```tsx
+"use client";
+
+export default function NewsArticle({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ articleId: string }>;
+  searchParams: Promise<{ lang?: "en" | "es" | "fr" }>;
+}) {
+  const { articleId } = use(params);
+  const { lang = "en" } = use(searchParams);
+}
+```
+
+- `client` komponentda `params` va `searchParams` `use` hooki orqali olinadi
+- `params: Promise<{ articleId: string }>` `searchParams: Promise<{ lang?: "en" | "es" | "fr" }>` client komponentda `params` va `searchParams` ni olish uchun ushb u ko'rinishfa type ko'rsatish kerak
