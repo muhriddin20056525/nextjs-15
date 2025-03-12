@@ -785,3 +785,98 @@ export default function NewsArticle({
 
 - `client` komponentda `params` va `searchParams` `use` hooki orqali olinadi
 - `params: Promise<{ articleId: string }>` `searchParams: Promise<{ lang?: "en" | "es" | "fr" }>` client komponentda `params` va `searchParams` ni olish uchun ushb u ko'rinishfa type ko'rsatish kerak
+
+---
+
+## **📌 17-dars Navigating Programmatically**
+
+```tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+import React from "react";
+
+export default function OrderProduct() {
+  const router = useRouter();
+  const handleClick = () => {
+    console.log("Placing your order");
+    router.push("/");
+  };
+
+  return (
+    <>
+      <h1>OrderProduct</h1>
+      <button onClick={handleClick}>Place order</button>
+    </>
+  );
+}
+```
+
+**Next.js `useRouter` bilan sahifaga yo‘naltirish**
+
+- **`useRouter`** → Next.js `next/navigation` modulidan olinib, foydalanuvchini boshqa sahifaga yo‘naltirish uchun ishlatiladi.
+
+- **`"use client";`**
+
+  - `useRouter` faqat **client component** ichida ishlaydi.
+
+- **`const router = useRouter();`**
+
+  - `useRouter()` Next.js ichki routerini qaytaradi.
+  - **Yo‘naltirish (`push` metodi bilan):**
+    ```tsx
+    router.push("/");
+    ```
+    Bu kod `"/"` sahifasiga (asosiy sahifa) o‘tishga sabab bo‘ladi.
+
+- **`handleClick` funksiyasi**
+
+  - `console.log("Placing your order");` → Konsolga xabar chiqaradi.
+  - `router.push("/")` → **Foydalanuvchini bosh sahifaga olib boradi.**
+
+```tsx
+const handleClick = () => {
+  console.log("Placing your order");
+  router.replace("/");
+};
+```
+
+- **`router.replace("/")`**
+
+  - **Foydalanuvchini bosh sahifaga (`/`) yo‘naltiradi**.
+  - **Tarix (`history`) o‘zgartiriladi**, foydalanuvchi `"orqaga"` (`back`) tugmachasini bosganda avvalgi sahifaga qayta olmaydi.
+
+- **`router.push("/")`**
+  - **Foydalanuvchini yo‘naltiradi**, lekin tarix saqlanadi.
+  - Foydalanuvchi `"orqaga"` (`back`) tugmachasi orqali oldingi sahifaga qaytishi mumkin.
+
+```tsx
+import React from "react";
+import { notFound, redirect } from "next/navigation";
+
+export default function ProductReview({
+  params,
+}: {
+  params: { productId: string; reviewId: string };
+}) {
+  const { productId, reviewId } = params;
+
+  if (parseInt(reviewId) > 1000) {
+    // notFound();
+    redirect("/products");
+  }
+
+  return (
+    <div>
+      <h1>ProductId {productId}</h1>
+      <h1>RewievId {reviewId}</h1>
+    </div>
+  );
+}
+```
+
+- Ushbu komponent **`productId`** va **`reviewId`** parametrlari bilan ishlaydi.
+- Agar **`reviewId`** **1000 dan katta bo‘lsa**, foydalanuvchi avtomatik ravishda **`/products`** sahifasiga yo‘naltiriladi.
+- **Yo‘naltirish** Next.js'ning `redirect()` funksiyasi orqali amalga oshiriladi.
+- `redirect("/products")` Next.js ichki funksiyasi bo‘lib, foydalanuvchini **server tomonida** (`server-side`) boshqa sahifaga yo‘naltiradi.
+- `redirect` ishlashi uchun **bu funksiya faqat server komponentlarida yoki server funksiyalarida (`server actions`) bo‘lishi kerak**.
