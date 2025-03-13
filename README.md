@@ -880,3 +880,38 @@ export default function ProductReview({
 - **Yo‘naltirish** Next.js'ning `redirect()` funksiyasi orqali amalga oshiriladi.
 - `redirect("/products")` Next.js ichki funksiyasi bo‘lib, foydalanuvchini **server tomonida** (`server-side`) boshqa sahifaga yo‘naltiradi.
 - `redirect` ishlashi uchun **bu funksiya faqat server komponentlarida yoki server funksiyalarida (`server actions`) bo‘lishi kerak**.
+
+---
+
+## **📌 18-dars Templates**
+
+Next.js 15 da `template` - bu `layout` (joylashuv) komponentiga o‘xshash, lekin asosiy farqi shundaki, har safar kirilganda qayta yaratiladi.
+
+`layout.tsx` - barcha sahifalar uchun bir martalik yaratiladi va qayta yuklanmaydi.
+`template.tsx` - har safar sahifaga kirilganda qayta render bo‘ladi.
+
+Next.js 15 da `template.tsx` faqat shu nom bilan ochilishi kerak. Next.js bu faylni avtomatik ravishda template komponenti deb tan oladi.
+
+- `layout.tsx` – layout sifatida ishlaydi.
+- `template.tsx` – har safar sahifa o‘zgarganda qayta render bo‘ladigan template sifatida ishlaydi.
+- `template.tsx` nomi o‘zgartirilsa, u ishlamaydi!
+
+**To‘g‘ri ishlatilishi**
+
+```app/
+ ├── dashboard/
+ │   ├── page.tsx
+ │   ├── template.tsx ✅ (to‘g‘ri)
+```
+
+**Noto‘g‘ri ishlatilishi**
+
+```
+app/
+ ├── dashboard/
+ │   ├── page.tsx
+ │   ├── myTemplate.tsx ❌ (xato – Next.js tanimaydi)
+
+```
+
+- `template.tsx` faqat shu nom bilan ochilishi kerak, aks holda Next.js uni tanimaydi va ishlamaydi.
