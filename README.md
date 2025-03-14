@@ -915,3 +915,29 @@ app/
 ```
 
 - `template.tsx` faqat shu nom bilan ochilishi kerak, aks holda Next.js uni tanimaydi va ishlamaydi.
+
+---
+
+## **📌 19-dars Loading UI**
+
+`Loading UI` – bu sahifalar yoki komponentlar yuklanayotgan paytda foydalanuvchilarga ko‘rsatiladigan vaqtinchalik interfeys. Next.js 15 App Router (ya’ni app directory) yordamida `loading.tsx` fayli orqali avtomatik Loading UI yaratish mumkin.
+
+- Next.js avtomatik aniqlaydi: Agar `app/` ichida `loading.tsx` bo‘lsa, sahifalar yuklanayotganda u ishlaydi.
+- Server komponentlar yoki ma’lumot yuklanayotganda ko‘rinadi.
+- Alohida sahifalar uchun ham ishlaydi, agar ularning ichida `loading.tsx` bo‘lsa.
+
+**Global Loading UI (app/loading.tsx)**
+
+```tsx
+// app/loading.tsx
+export default function Loading() {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+    </div>
+  );
+}
+```
+
+- Har qanday sahifa yangi sahifaga o‘tayotganda yoki ma’lumot yuklanayotganda ushbu loading.tsx komponentini ko‘rsatadi.
+- Hech qanday qo‘shimcha import yoki kod yozish shart emas, Next.js uni avtomatik topib ishlatadi.
