@@ -981,3 +981,46 @@ export default function ErrorBoundary({ error }: { error: Error }) {
 ```
 
 - ushbu fayl `/app/products/[productId]/reviews/[reviewId]/page.tsx` fayli qaytargan xatolikni ushlab uni foydalanuvchiga ko'rstadi
+
+---
+
+## **📌 21-dars Recovering from Errors**
+
+Next.js 15 da `Recovering from Errors` bu xatoliklarni boshqarish va ulardan `tiklanish` usuli hisoblanadi. Next.js App Router da xatoliklarni `error.js` fayli orqali boshqarish mumkin.
+
+```tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+import { startTransition } from "react";
+
+export default function ErrorBoundary({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  const router = useRouter();
+  const reload = () => {
+    startTransition(() => {
+      router.refresh();
+      reset();
+    });
+  };
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={reload}>Try again</button>
+    </div>
+  );
+}
+```
+
+Bu kod Next.js 15 da xatoliklarni ushlash va ulardan tiklanish uchun ishlatiladigan ErrorBoundary komponentidir.
+
+- `useRouter` hooki orqali sahifani boshqarish imkoniyatini oladi.
+- `startTransition` yordamida sahifani qayta yuklashni yumshoq (smooth) tarzda bajaradi.
+- `error.message` orqali yuzaga kelgan xatolik haqida xabar chiqaradi.
+- `reload` funksiyasi `router.refresh()` bilan sahifani yangilaydi va `reset()` chaqirib, xatolikdan tiklanishga harakat qiladi.
+- Tugma bosilganda (`onClick={reload}`) `reload()` funksiyasi ishga tushadi va sahifa qayta yuklanadi.
