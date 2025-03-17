@@ -941,3 +941,43 @@ export default function Loading() {
 
 - Har qanday sahifa yangi sahifaga o‘tayotganda yoki ma’lumot yuklanayotganda ushbu loading.tsx komponentini ko‘rsatadi.
 - Hech qanday qo‘shimcha import yoki kod yozish shart emas, Next.js uni avtomatik topib ishlatadi.
+
+---
+
+## **📌 20-dars Error Handling**
+
+`error.tsx` fayli `Next.js App Router` da xatoliklarni ushlash va foydalanuvchiga mos keluvchi xato sahifasini ko‘rsatish uchun ishlatiladi.
+
+`/app/products/[productId]/reviews/[reviewId]/page.tsx`
+
+```tsx
+function getRandomInt(count: number) {
+  return Math.floor(Math.random() * count);
+}
+
+export default async function ProductReview({
+  params,
+}: {
+  params: Promise<{ productId: string; reviewId: string }>;
+}) {
+  const random = getRandomInt(2);
+
+  if (random === 1) {
+    throw new Error("Error loading review");
+  }
+}
+```
+
+- ushbu kodlar xatolik yaratish uchun ishlatilmoqda xatolik sodir bo'lganda `error.tsx` fayli orqali shu xatolikni ushlab foydalanivchiga ko'rsatiladi
+
+`/app/products/[productId]/reviews/[reviewId]/error.tsx`
+
+```tsx
+"use client";
+
+export default function ErrorBoundary({ error }: { error: Error }) {
+  return <div>{error.message}</div>;
+}
+```
+
+- ushbu fayl `/app/products/[productId]/reviews/[reviewId]/page.tsx` fayli qaytargan xatolikni ushlab uni foydalanuvchiga ko'rstadi
