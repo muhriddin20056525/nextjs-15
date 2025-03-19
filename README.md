@@ -1035,3 +1035,71 @@ Next.js 15 da `error boundary (error.tsx)` fayllari o‘zidan pastdagi barcha `n
 - Agar `error.tsx` ichki marshrutda `(/app/products/[productId]/reviews/[reviewId]/error.tsx)` joylashgan bo‘lsa, u faqat shu yo‘nalishdagi xatolarni ushlaydi.
 - Agar shu faylni yuqoriga, ya’ni `/app/products/error.tsx` ga ko‘chirsak, u butun products papkasi ichidagi barcha sahifalar uchun ishlaydi `(shu jumladan products/[productId]/reviews/[reviewId]).`
 - Bu inheritance (meros olish) tamoyili asosida ishlaydi: eng yaqin error boundary ishlaydi, agar mavjud bo‘lmasa, undan yuqoridagisi ishlaydi.
+
+## **📌 23-dars Handling Errors in Layouts**
+
+`layout.tsx` fayllarida uchraydigan xatolarni ham `error.tsx` orqali ushlab olihs mumkin
+
+`/app/products/[productId]/layout.tsx`
+
+```tsx
+import React, { ReactNode } from "react";
+
+function getRandomInt(count: number) {
+  return Math.floor(Math.random() * count);
+}
+
+export default function ProductDetailLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const random = getRandomInt(2);
+
+  if (random === 1) {
+    throw new Error("Error loading product");
+  }
+
+  return (
+    <>
+      {children}
+      <h2>Featured Products</h2>
+    </>
+  );
+}
+```
+
+- `getRandomInt` - funksiyasi orqali prodictId sahifasi yuklanganda xatolik chiqarib oldik
+
+`/app/products/error.tsx`
+
+```tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+import { startTransition } from "react";
+
+export default function ErrorBoundary({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  const router = useRouter();
+  const reload = () => {
+    startTransition(() => {
+      router.refresh();
+      reset();
+    });
+  };
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={reload}>Try again</button>
+    </div>
+  );
+}
+```
+
+- ushbu fayl orqali shu `route` ichidagi va `layout` ichidagi xatoliklarni ushlab qayta ishlaymiz
