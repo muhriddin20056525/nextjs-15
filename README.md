@@ -1024,3 +1024,14 @@ Bu kod Next.js 15 da xatoliklarni ushlash va ulardan tiklanish uchun ishlatiladi
 - `error.message` orqali yuzaga kelgan xatolik haqida xabar chiqaradi.
 - `reload` funksiyasi `router.refresh()` bilan sahifani yangilaydi va `reset()` chaqirib, xatolikdan tiklanishga harakat qiladi.
 - Tugma bosilganda (`onClick={reload}`) `reload()` funksiyasi ishga tushadi va sahifa qayta yuklanadi.
+
+---
+
+## **📌 22-dars Handling Errors in Nested Routes**
+
+oldingi darslarda `error.tsx` fayli `/app/products/[productId]/reviews/[reviewId]/error.tsx` da turgandi uni olib `/app/products/error.tsx` ga qo'ydik shunda ham u avvalgidek ishladi.
+Next.js 15 da `error boundary (error.tsx)` fayllari o‘zidan pastdagi barcha `nested routes (ichki yo‘nalishlar)` uchun ham ishlaydi.
+
+- Agar `error.tsx` ichki marshrutda `(/app/products/[productId]/reviews/[reviewId]/error.tsx)` joylashgan bo‘lsa, u faqat shu yo‘nalishdagi xatolarni ushlaydi.
+- Agar shu faylni yuqoriga, ya’ni `/app/products/error.tsx` ga ko‘chirsak, u butun products papkasi ichidagi barcha sahifalar uchun ishlaydi `(shu jumladan products/[productId]/reviews/[reviewId]).`
+- Bu inheritance (meros olish) tamoyili asosida ishlaydi: eng yaqin error boundary ishlaydi, agar mavjud bo‘lmasa, undan yuqoridagisi ishlaydi.
