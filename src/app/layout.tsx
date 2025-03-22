@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import "./globals.css";
 import { Metadata } from "next";
+import { ErrorWrapper } from "./error-wrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="w-full p-10 bg-blue-600 text-white">
           <p>Header</p>
         </header>
-        {children}
+        <ErrorWrapper>{children}</ErrorWrapper>
         <footer className="w-full p-10 bg-green-600 text-white">
           <p>Footer</p>
         </footer>

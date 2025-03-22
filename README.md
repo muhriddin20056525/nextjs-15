@@ -1103,3 +1103,89 @@ export default function ErrorBoundary({
 ```
 
 - ushbu fayl orqali shu `route` ichidagi va `layout` ichidagi xatoliklarni ushlab qayta ishlaymiz
+
+---
+
+## **📌 24-dars Handling Global Errors**
+
+`error-wrapper.tsx`
+
+```tsx
+"use client";
+
+import { ReactNode, useState } from "react";
+import "./globals.css";
+
+interface WrapperProps {
+  children: ReactNode;
+}
+
+const ErrorSimulator = ({
+  message = "An error occured",
+}: {
+  message?: string;
+}) => {
+  const [error, setError] = useState(false);
+
+  if (error) throw new Error(message);
+
+  return (
+    <button
+      title="Simulate an error"
+      className="bg-red-950 text-red-500 rounded leading-none font-semibold text-sm"
+      onClick={() => setError(true)}
+    >
+      Simulate Error
+    </button>
+  );
+};
+
+export const ErrorWrapper = ({ children }: WrapperProps) => {
+  return (
+    <div className="flex flex-col rounded-lg mt-8 relative p-4 border border-gray-300">
+      <div className="absolute top-0 left-4 -translate-x-1/2">
+        <ErrorSimulator message="Simulated error in root layout" />
+      </div>
+      {children}
+    </div>
+  );
+};
+```
+
+- `ErrorWrapper` komponenti bolalar (children) komponentlarni qoplaydi va ularga xato sinov tugmachasini qo‘shadi.
+- `ErrorSimulator` tugmasi bosilganda throw new Error orqali sun'iy xatolik yaratadi.
+- `useState` yordamida xato holati boshqariladi va tugma bosilganda xato yuzaga keladi.
+- `ErrorWrapper` dizayni bilan xatolarni tekshirish uchun maxsus quti hosil qiladi.
+- Bu komponent xatolarni test qilish va xato boshqarish mexanizmini tekshirish uchun foydalidir.
+- `global-error.tsx` bilan birga ishlatilsa, butun ilovadagi xatolarni boshqarish osonlashadi.
+
+`global-error.tsx`
+
+```tsx
+"use client";
+
+import "./globals.css";
+
+export default function GlobalError() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h2 className="text-2xl font-bold mb-4">Something went wrong</h2>
+      <button
+        onClick={() => {
+          window.location.reload();
+        }}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Reload
+      </button>
+    </div>
+  );
+}
+```
+
+- `GlobalError` butun ilovada yuzaga keladigan xatolarni ushlab olish va foydalanuvchiga ko‘rsatish uchun ishlatiladi.
+- Xatolik sodir bo‘lganda, ekranda `"Something went wrong"` xabari chiqadi.
+- `"Reload"` tugmasi bosilganda, sahifa qayta yuklanadi (`window.location.reload()`).
+- CSS klasslar yordamida markazga joylashtirilgan chiroyli xato sahifasi hosil qilinadi.
+- `error.tsx` faqat muayyan sahifa yoki komponent xatolarini boshqarsa, `global-error.tsx` butun ilova bo‘ylab xatolarni boshqaradi.
+- Bu komponent Next.js 15'da xatolarni foydalanuvchiga tushunarli ko‘rinishda ko‘rsatish uchun ishlatiladi.
