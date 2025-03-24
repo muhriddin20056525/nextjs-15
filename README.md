@@ -1280,3 +1280,87 @@ export default function UsersAnalytics() {
 ```
 
 - `@slot` kataloglari har bir bo‘limni mustaqil sahifa sifatida ishlashiga imkon beradi.
+
+---
+
+## **📌 26-dars Unmatched Routes**
+
+Oldingi darsda Parallel Routes bilan tanishgan edik, bu orqali bir sahifada bir vaqtning o‘zida bir nechta route'larni ko‘rsatish mumkin. Masalan, quyidagi tuzilmani olaylik:
+
+- `/app/complex-dashboard/page.tsx` – asosiy sahifa
+- `/app/complex-dashboard/@notifications/page.tsx` – bildirishnomalar qismi
+- `/app/complex-dashboard/@users/page.tsx` – foydalanuvchilar qismi
+- `/app/complex-dashboard/@revenue/page.tsx` – daromadlar qismi
+
+Bu holatda `complex-dashboard` sahifasi ochilganda `@notifications`, `@users` va `@revenue` parallel ravishda yuklanadi.
+
+Agar biz `@notifications` ichida qo‘shimcha route yaratib, masalan:
+
+`/app/complex-dashboard/@notifications/archive/page.tsx`
+
+ushbu yo‘nalishga o‘tsak, u ishlaydi. Lekin sahifa yangilanganda Next.js ushbu ichki route'ni topa olmaydi va xatolik beradi.
+
+Nega bu sodir bo‘ladi?
+`@notifications` – bu aslida `slot`, ya’ni `complex-dashboard` sahifasining tarkibiy qismi. Next.js uni odatdagi papka sifatida emas, alohida `parallel slot` sifatida ko‘radi. Shuning uchun ichki marshrutlar (`archive/page.tsx`) sahifa yangilanishi paytida noto‘g‘ri yo‘nalish sifatida qabul qilinishi mumkin.
+
+`/app/complex-dashboard/@notifications/page.tsx`
+
+```tsx
+import Card from "@/components/Card";
+import Link from "next/link";
+import React from "react";
+
+export default function Notifications() {
+  return (
+    <Card>
+      <div>Notification</div>
+      <div>
+        <Link
+          href={"/complex-dashboard/archived"}
+          className="ml-2 text-purple-700"
+        >
+          Archived
+        </Link>
+      </div>
+    </Card>
+  );
+}
+```
+
+- Ushbu sahifa `complex-dashboard` sahifasidagi parallel routelardan biri
+- Bu sahifada `/app/complex-dashboard/@notifications/archive/page.tsx` sahifasiga yuboradigan link bor bu link bosilganda shu sahifaga o'tadi lekin sahifa yangilansa bu sahifa `slot` sifatida ishlamaydi va xatolik chiqadi
+
+`/app/complex-dashboard/@notifications/archive/page.tsx`
+
+```tsx
+import Card from "@/components/Card";
+import Link from "next/link";
+import React from "react";
+
+export default function ArchivedNotifications() {
+  return (
+    <Card>
+      <div>Archived notifications</div>
+      <div>
+        <Link href={"/complex-dashboard"} className="ml-2 text-purple-700">
+          Default
+        </Link>
+      </div>
+    </Card>
+  );
+}
+```
+
+- Bu sahifada `/complex-dashboard` sahifasiga o'tadigan link bor mu bosilganda unga o'tadi
+
+`/app/complex-dashboard/default.tsx`
+
+```tsx
+import React from "react";
+
+export default function ComplexDashboardDefaultPage() {
+  return <div>Complex Dashboard Default</div>;
+}
+```
+
+- ushbu sahifa shu route ichidagi parallel routelar xatolik chiqarsa foydalanuvchiga shu yerdagi sahifa ko'rinadi
