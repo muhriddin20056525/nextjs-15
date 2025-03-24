@@ -1189,3 +1189,94 @@ export default function GlobalError() {
 - CSS klasslar yordamida markazga joylashtirilgan chiroyli xato sahifasi hosil qilinadi.
 - `error.tsx` faqat muayyan sahifa yoki komponent xatolarini boshqarsa, `global-error.tsx` butun ilova bo‘ylab xatolarni boshqaradi.
 - Bu komponent Next.js 15'da xatolarni foydalanuvchiga tushunarli ko‘rinishda ko‘rsatish uchun ishlatiladi.
+
+---
+
+## **📌 25-dars Parallel Routes**
+
+Odatda Next.js-da har bir sahifa yagona `layout` ichida bitta asosiy content (`slot`) sifatida yuklanadi. Lekin `Parallel Routes` yordamida bitta sahifada bir nechta mustaqil route’larni yuklash mumkin. Bu asosan `dashboard` kabi ilovalarda foydalidir.
+
+`Papka Tuzulmasi`
+
+```app/
+ ├── complex-dashboard/
+ │   ├── layout.tsx
+ │   ├── page.tsx
+ │   ├── @notifications/
+ │   │   ├── page.tsx
+ │   ├── @revenue/
+ │   │   ├── page.tsx
+ │   ├── @users/
+ │   │   ├── page.tsx
+
+```
+
+- `complex-dashboard/layout.tsx` – umumiy layout
+- `complex-dashboard/page.tsx` – asosiy dashboard sahifasi
+- `complex-dashboard/@notifications/page.tsx` – bildirishnomalar (notifications)
+- `complex-dashboard/@revenue/page.tsx` – daromad statistikasi (revenue)
+- `complex-dashboard/@users/page.tsx` – foydalanuvchilar ro‘yxati (users)
+
+`complex-dashboard/layout.tsx`
+
+Bu yerda barcha `@slot` larni parallel yuklaymiz.
+
+```tsx
+import React, { ReactNode } from "react";
+
+export default function ComplexDashboardLayout({
+  children,
+  users,
+  revenue,
+  notifications,
+}: {
+  children: ReactNode;
+  users: ReactNode;
+  revenue: ReactNode;
+  notifications: ReactNode;
+}) {
+  return (
+    <>
+      <div>{children}</div>
+      <div className="flex">
+        <div className="flex flex-col">
+          <div>{users}</div>
+          <div>{revenue}</div>
+        </div>
+        <div className="flex flex-1">{notifications}</div>
+      </div>
+    </>
+  );
+}
+```
+
+- Sahifalar `props` ga keladi va ulani olib `jsx` shaklida ishlatish mumkin
+
+`complex-dashboard/@notifications/page.tsx`
+`complex-dashboard/@revenue/page.tsx`
+`complex-dashboard/@users/page.tsx`
+
+```tsx
+import Card from "@/components/Card";
+import React from "react";
+
+export default function Notifications() {
+  return <Card>Notifications</Card>;
+}
+
+import Card from "@/components/Card";
+import React from "react";
+
+export default function Revenue() {
+  return <Card>Revenue</Card>;
+}
+
+import Card from "@/components/Card";
+import React from "react";
+
+export default function UsersAnalytics() {
+  return <Card>UsersAnalytics</Card>;
+}
+```
+
+- `@slot` kataloglari har bir bo‘limni mustaqil sahifa sifatida ishlashiga imkon beradi.
