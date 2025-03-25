@@ -1364,3 +1364,54 @@ export default function ComplexDashboardDefaultPage() {
 ```
 
 - ushbu sahifa shu route ichidagi parallel routelar xatolik chiqarsa foydalanuvchiga shu yerdagi sahifa ko'rinadi
+
+---
+
+## **📌 27-dars Conditional Routes**
+
+`Conditional Routes` - Bu foydalanuvchini malum bir shartlar asosida turli sahifalarga yo'naltirishga aytiladi
+
+```tsx
+import React, { ReactNode } from "react";
+
+export default function ComplexDashboardLayout({
+  children,
+  users,
+  revenue,
+  notifications,
+  login,
+}: {
+  children: ReactNode;
+  users: ReactNode;
+  revenue: ReactNode;
+  notifications: ReactNode;
+  login: ReactNode;
+}) {
+  const isLoggedIn = false;
+  return isLoggedIn ? (
+    <>
+      <div>{children}</div>
+      <div className="flex">
+        <div className="flex flex-col">
+          <div>{users}</div>
+          <div>{revenue}</div>
+        </div>
+        <div className="flex flex-1">{notifications}</div>
+      </div>
+    </>
+  ) : (
+    login
+  );
+}
+```
+
+Bu kod Next.js `ComplexDashboardLayout` deb nomlangan layout component bo‘lib, shartli ravishda foydalanuvchini `dashboard` yoki `login` sahifasiga yo‘naltiradi.
+
+- Agar `isLoggedIn === true` bo‘lsa:
+  - `children` (`<div>{children}</div>`) - dashboard sahifasi
+  - `users` - foydalanuvchi statistikasi
+  - `revenue` - daromad ma’lumotlari
+  - `notifications` - bildirishnomalar
+- Agar `isLoggedIn === false` bo‘lsa:
+- Dashboard tarkibi ko‘rsatilmaydi
+- Faqat `login` sahifasi (login prop sifatida qabul qilingan)
