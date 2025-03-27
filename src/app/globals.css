@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.link {
+  color: blueviolet;
+  text-decoration: underline;
+}

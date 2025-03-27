@@ -1415,3 +1415,114 @@ Bu kod Next.js `ComplexDashboardLayout` deb nomlangan layout component bo‘lib,
 - Agar `isLoggedIn === false` bo‘lsa:
 - Dashboard tarkibi ko‘rsatilmaydi
 - Faqat `login` sahifasi (login prop sifatida qabul qilingan)
+
+---
+
+## **📌 28-dars Intercepting Routes**
+
+**Intercepting Routes** — bu bir sahifadan boshqa sahifaga o'tish jarayonida qo'shimcha oraliq sahifani ko'rsatish imkonini beruvchi usul. Ushbu texnika foydalanuvchiga yakuniy sahifa to'liq yuklanishidan oldin qo'shimcha ma'lumot yoki animatsiya ko'rsatish imkonini beradi.
+
+Misol uchun, quyidagi marshrutlarga ega bo'lgan Next.js ilovamiz bor:
+
+- `/app/f1/page.tsx`
+- `/app/f1/f2/page.tsx`
+
+Agar ushbu ikki sahifa orasida yana bir qo'shimcha sahifa ko'rsatmoqchi bo'lsak, quyidagi usuldan foydalanamiz:
+
+```
+/app/f1/(.)f2/page.tsx
+```
+
+Bu usul quyidagicha ishlaydi:
+
+- Agar foydalanuvchi `/app/f1` sahifasidan `/app/f1/f2` sahifasiga o'tsa, dastlab **`/app/f1/(.)f2/page.tsx`** sahifasi ochiladi.
+- Agar foydalanuvchi `/app/f1/f2` sahifasini brauzerda yangilasa, to'g'ridan-to'g'ri **`/app/f1/f2/page.tsx`** sahifasi yuklanadi.
+
+**Asosiy sahifa (`/app/f1/page.tsx`)**
+
+Bu sahifada foydalanuvchi `F2` sahifasiga o'tishi mumkin.
+
+```tsx
+import Link from "next/link";
+
+export default function F1() {
+  return (
+    <div className="p-5">
+      <h1>F1 Sahifasi</h1>
+      <div>
+        <Link href={"/f1/f2"} className="link">
+          F2 sahifasiga o'tish
+        </Link>
+      </div>
+    </div>
+  );
+}
+```
+
+**Yakuniy sahifa (`/app/f1/f2/page.tsx`)**
+
+Bu sahifa foydalanuvchi oxirgi manzilga yetib kelganda ochiladi.
+
+```tsx
+import React from "react";
+
+export default function F2() {
+  return <div>F2 Sahifasi</div>;
+}
+```
+
+**Oraliq sahifa (`/app/f1/(.)f2/page.tsx`)**
+
+Bu sahifa `F2` sahifasiga o'tishdan oldin ko'rsatiladi.
+
+```tsx
+import React from "react";
+
+export default function InterceptedF2() {
+  return <h1>(.) Oraliq F2 sahifasi</h1>;
+}
+```
+
+1. Agar foydalanuvchi `F1 Sahifasi`dan `F2 Sahifasi`ga o'tsa, **avval** `Oraliq F2 Sahifasi` ochiladi.
+2. Agar foydalanuvchi **brauzerni yangilasa**, u to'g'ridan-to'g'ri `F2 Sahifasi`ga o'tadi va oraliq sahifa ko'rsatilmaydi.
+
+**`(.)` belgisining vazifasi**
+
+- `(.)` katalog nomida ishlatilganda, Next.js ushbu sahifani **oraliq sahifa** sifatida belgilaydi.
+- Bu sahifa faqat ichki navigatsiya jarayonida ko'rsatiladi, lekin sahifa to'g'ridan-to'g'ri yangilansa, ushbu sahifa ishlamaydi.
+
+**Agar ikki sahifa turli kataloglarda joylashgan bo‘lsa, masalan:**
+
+`/app/f1/page.tsx`
+
+`/app/f3/page.tsx`
+
+va `/app/f3/page.tsx` ochilishidan oldin oraliq sahifa qo‘shmoqchi bo‘lsak, unda `/app/f1/` ichida quyidagi route yaratamiz:
+
+`/app/f1/(..)f3/page.tsx`
+
+Bu oraliq sahifa sifatida ishlaydi va `/app/f3/page.tsx` sahifasiga o‘tishdan oldin ko‘rsatiladi.
+
+**Agar oraliq sahifa ikki darajali kataloglar orasida bo‘lsa-chi?**
+
+Agar biz `/app/f1/f2/page.tsx` sahifasidan `/app/f4/page.tsx` sahifasiga o'tmoqchi bo'lsak va oraliq sahifa qo'shmoqchi bo'lsak, quyidagi usuldan foydalanamiz:
+
+`/app/f1/f2/(..)(..)f4/page.tsx`
+
+Bu quyidagicha ishlaydi:
+
+`/app/f1/f2/page.tsx` sahifasidan `/app/f4/page.tsx` sahifasiga o'tishda avval `/app/f1/f2/(..)(..)f4/page.tsx` sahifasi ochiladi.
+
+Agar foydalanuvchi brauzerni yangilasa, u to'g'ridan-to'g'ri `/app/f4/page.tsx` sahifasiga o'tadi.
+
+**Agar ichki katalog ichida intercepting sahifa ishlatilsa-chi?**
+
+Agar `/app/f1/f2/inner-f2/page.tsx` sahifasidan `/app/f5/page.tsx` sahifasiga o'tmoqchi bo‘lsak va oraliq sahifa ishlatmoqchi bo‘lsak, quyidagi tuzilmani yaratamiz:
+
+`/app/f1/f2/inner-f2/(...)f5/page.tsx`
+
+Bu qanday ishlaydi?
+
+Agar foydalanuvchi `inner-f2` sahifasidan `f5` sahifasiga o'tsa, dastlab `/app/f1/f2/inner-f2/(...)f5/page.tsx` sahifasi ochiladi.
+
+Agar foydalanuvchi brauzerni yangilasa, u to‘g‘ridan-to‘g‘ri /`app/f5/page.tsx` sahifasiga yo‘naltiriladi.
